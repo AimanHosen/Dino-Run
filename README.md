@@ -1,6 +1,4 @@
-# Dino Run by Aiman
-
-A Pen created on CodePen.
+# Dino Run by Aiman.
 
 Original URL: [https://codepen.io/CM-GameYT/pen/jEbEpOd](https://codepen.io/CM-GameYT/pen/jEbEpOd).
 
