@@ -1,0 +1,304 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+  touch-action: manipulation;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Game Container & Header */
+#gameContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#header {
+  color: black; /* Day mode text color */
+  transition: color 0.5s ease;
+  position: absolute;
+  top: 1vh;
+  width: 100%;
+  padding: 0 2vw;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1em;
+  z-index: 10;
+  gap: 1vw;
+}
+
+#backgroundLayer.night ~ #gameContainer #header {
+  color: white; /* Night mode text color */
+}
+
+#developer {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#scoreContainer {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+#highScore {
+  margin-bottom: 0.3vh;
+}
+
+/* Game Area */
+#gameArea {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+  border-top: 3px solid #333;
+  transition: border-color 0.3s ease;
+  position: relative;
+  background: none;
+  z-index: 1;
+}
+
+/* Background layer */
+#backgroundLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: white; /* Day background */
+  z-index: 1;
+  transition: background 0.5s ease;
+}
+
+/* Stars for night mode */
+#backgroundLayer.night::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, #fff, transparent),
+    radial-gradient(2px 2px at 40% 40%, #fff, transparent),
+    radial-gradient(2px 2px at 60% 15%, #fff, transparent),
+    radial-gradient(2px 2px at 80% 50%, #fff, transparent),
+    radial-gradient(2px 2px at 20% 70%, #fff, transparent),
+    radial-gradient(2px 2px at 50% 80%, #fff, transparent),
+    radial-gradient(2px 2px at 85% 75%, #fff, transparent);
+  background-repeat: repeat;
+  background-size: 100% 100%;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Cloud Layer */
+#cloudLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%; /* same height as background */
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1.5; /* between background and road/dino */
+}
+
+.cloud {
+  position: absolute;
+  top: var(--top);
+  left: calc(-20vw * var(--i));
+  width: 20vw;
+  height: 10vh;
+  background: #fff;
+  border-radius: 50% / 60%;
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
+  opacity: 0.8;
+  animation: moveCloud linear infinite;
+  animation-duration: var(--speed);
+  box-shadow:
+    10vw 2vh 0 0 #fff,
+    15vw 4vh 0 0 #fff,
+    5vw 5vh 0 0 #fff;
+  transition: background-color 0.5s ease, opacity 0.5s ease;
+}
+
+/* Night mode clouds */
+#backgroundLayer.night ~ #gameArea #cloudLayer .cloud {
+  background: #cce6ff;
+  box-shadow:
+    10vw 2vh 0 0 #cce6ff,
+    15vw 4vh 0 0 #cce6ff,
+    5vw 5vh 0 0 #cce6ff;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 3px #aaddff);
+}
+
+@keyframes moveCloud {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(120vw);
+  }
+}
+
+/* Road layer day (black and moving) */
+#roadLayer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: black;
+  z-index: 2;
+  background-size: 200% 100%;
+  animation: moveRoad 3s linear infinite;
+  transition: background 0.5s ease;
+}
+
+/* Road layer night (blue gradient and moving) */
+#roadLayer.night {
+  background: linear-gradient(90deg, #0033cc 0%, #66ccff 50%, #0033cc 100%);
+  animation: moveRoad 3s linear infinite;
+}
+
+@keyframes moveRoad {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Background night override */
+#backgroundLayer.night {
+  background: #121212;
+}
+
+/* Dino & cactus */
+#dino {
+  position: absolute;
+  bottom: 5vh;
+  left: 5vw;
+  width: 12vw;
+  max-width: 80px;
+  height: auto;
+  z-index: 3;
+}
+
+#cactus {
+  position: absolute;
+  bottom: 5vh;
+  right: -10vw;
+  width: 6vw;
+  max-width: 50px;
+  height: auto;
+  z-index: 3;
+}
+
+/* Pause button */
+#pauseBtn {
+  position: absolute;
+  bottom: 2vh;
+  right: 2vw;
+  padding: 1vh 2vw;
+  font-size: 1.5em;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  display: none;
+  z-index: 10;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Menus */
+.menu {
+  position: absolute;
+  top: 30vh;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 4vh 4vw;
+  border-radius: 15px;
+  text-align: center;
+  z-index: 20;
+  display: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu h1,
+.menu h2 {
+  margin-bottom: 2vh;
+}
+
+.menu button {
+  padding: 1vh 2vw;
+  font-size: 1.2em;
+  margin-top: 1vh;
+  cursor: pointer;
+  border: none;
+  background: #444;
+  color: white;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.menu button:hover {
+  background: #666;
+}
+
+/* Jump animation */
+@keyframes jump {
+  0% {
+    bottom: 5vh;
+  }
+  50% {
+    bottom: 40vh; /* increased jump height */
+  }
+  100% {
+    bottom: 5vh;
+  }
+}
+
+/* Cactus movement */
+@keyframes moveCactus {
+  0% {
+    right: -10vw;
+  }
+  100% {
+    right: 110vw;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #dino {
+    width: 18vw;
+  }
+
+  #cactus {
+    width: 10vw;
+  }
+
+  .menu {
+    width: 90%;
+  }
+
+  #header {
+    font-size: 1em;
+    padding: 0 3vw;
+  }
+}
